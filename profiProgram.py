@@ -46,7 +46,7 @@ class ProfiProgram():
     Check if username and password is correct
     """
     def checkCredentials(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/tv.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        page = self.opener.open('http://www.blem.cz/list/exportkodi/login.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -58,8 +58,10 @@ class ProfiProgram():
     Create modes folders, live tv or archive tv
     """
     def createModes(self):
+        #Check credentials
         if self.checkCredentials() != 1:
             return
+
         url = self.buildUrl({'mode': 'archive'})
         item = xbmcgui.ListItem("Archiv", iconImage="defaultFolder.png")
         xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
