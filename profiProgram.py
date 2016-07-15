@@ -43,9 +43,23 @@ class ProfiProgram():
         return self.baseUrl + '?' + urllib.urlencode(query)
 
     """
+    Check if username and password is correct
+    """
+    def checkCredentials(self):
+        page = self.opener.open('http://www.blem.cz/list/exportkodi/tv.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        pageContent = page.read()
+        xmlDom = xml.dom.minidom.parseString(pageContent)
+
+        # Results of logining
+        xbmc.executebuiltin('Notification(%s, %s, %d)' % ('Info', xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('info')[0].firstChild.nodeValue.encode("utf-8"), 3000))
+        return int(xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('id')[0].firstChild.nodeValue)
+
+    """
     Create modes folders, live tv or archive tv
     """
     def createModes(self):
+        if self.checkCredentials() != 1:
+            return
         url = self.buildUrl({'mode': 'archive'})
         item = xbmcgui.ListItem("Archiv", iconImage="defaultFolder.png")
         xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
@@ -61,9 +75,6 @@ class ProfiProgram():
         page = self.opener.open('http://www.blem.cz/list/exportkodi/tv.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
-
-        #Results of logining
-        xbmc.executebuiltin('Notification(%s, %s, %d)'%('Info', xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('info')[0].firstChild.nodeValue.encode("utf-8"), 1000))
 
         #Search
         url = self.buildUrl({'mode': 'search'})
@@ -137,15 +148,12 @@ class ProfiProgram():
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
-        # Results of logining
-        xbmc.executebuiltin('Notification(%s, %s, %d)' % ('Info', xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('info')[0].firstChild.nodeValue.encode("utf-8"), 1000))
-
         for tvShow in xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('tv'):
             item = xbmcgui.ListItem(tvShow.getElementsByTagName('nazev')[0].firstChild.nodeValue, iconImage=tvShow.getElementsByTagName('logo')[0].firstChild.nodeValue)
             item.setLabel(tvShow.getElementsByTagName('nazev')[0].firstChild.nodeValue)
             item.setThumbnailImage(tvShow.getElementsByTagName('logo')[0].firstChild.nodeValue)
             #item.setInfo('video', {'duration': tvShow.getElementsByTagName('delka')[0].firstChild.nodeValue})
-            xbmcplugin.addDirectoryItem(handle=self.addonHandle, url='http:///hls/blive.m3u8?token=8n4bSyqQVzhlJVoBrdkMJF9d%2F%2Fn3K2Tnj7TeXKyUZtgzqsnl71d49SbkSU7prsIsYzXgimeAa3hKYcUfmVOshQ%3D%3D', listitem=item)
+            xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=tvShow.getElementsByTagName('url')[0].firstChild.nodeValue, listitem=item)
 
         xbmcplugin.endOfDirectory(self.addonHandle)
 

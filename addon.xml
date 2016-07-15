@@ -8,14 +8,16 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_gb">Profi Program</summary>
-    <description lang="en_gb"></description>
+    <description lang="en_gb">
+      Profi Program Archiv a Live TV
+    </description>
     <summary lang="cs">Profi Program</summary>
     <description lang="cs">
-      
+      Profi Program Archiv a Live TV
     </description>
     <summary lang="sk">Profi Program</summary>
     <description lang="sk">
-      
+      Profi Program Archiv a Live TV
     </description>
     <disclaimer lang="en_gb"></disclaimer>
     <language></language>
