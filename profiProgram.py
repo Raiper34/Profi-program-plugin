@@ -30,6 +30,7 @@ class ProfiProgram():
         settings = xbmcaddon.Addon()
         self.username = settings.getSetting('username')
         self.password = settings.getSetting('password')
+        self.website = 'http://www.profi-program.com'
 
         cookies = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies))
@@ -46,7 +47,7 @@ class ProfiProgram():
     Check if username and password is correct
     """
     def checkCredentials(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/login.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        page = self.opener.open(self.website + '/list/exportkodi/login.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -74,7 +75,7 @@ class ProfiProgram():
     Create channels folder
     """
     def createChannels(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/tv.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        page = self.opener.open(self.website + '/list/exportkodi/tv.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -94,7 +95,7 @@ class ProfiProgram():
     Create dates folder
     """
     def createDates(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/den.php?' + urllib.urlencode({'mail': self.arguments['channelsId'][0]}))
+        page = self.opener.open(self.website + '/list/exportkodi/den.php?' + urllib.urlencode({'mail': self.arguments['channelsId'][0]}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -109,7 +110,7 @@ class ProfiProgram():
     Create list of videos
     """
     def createVideos(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/porady.php?' + urllib.urlencode({'id': self.arguments['channelId'][0], 'den': self.arguments['dayId'][0], 'mail': self.username, 'heslo': self.password}))
+        page = self.opener.open(self.website + '/list/exportkodi/porady.php?' + urllib.urlencode({'id': self.arguments['channelId'][0], 'den': self.arguments['dayId'][0], 'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -129,7 +130,7 @@ class ProfiProgram():
         keyboard = xbmc.Keyboard('', 'Hledat')
         keyboard.doModal()
         if keyboard.isConfirmed():
-            page = self.opener.open('http://www.blem.cz/list/exportkodi/search.php?' + urllib.urlencode({'co': keyboard.getText(), 'mail': self.username, 'heslo': self.password}))
+            page = self.opener.open(self.website + '/list/exportkodi/search.php?' + urllib.urlencode({'co': keyboard.getText(), 'mail': self.username, 'heslo': self.password}))
             pageContent = page.read()
             xmlDom = xml.dom.minidom.parseString(pageContent)
 
@@ -146,7 +147,7 @@ class ProfiProgram():
     Create live TV list
     """
     def createLiveTv(self):
-        page = self.opener.open('http://www.blem.cz/list/exportkodi/live.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        page = self.opener.open(self.website + '/list/exportkodi/live.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
         pageContent = page.read()
         xmlDom = xml.dom.minidom.parseString(pageContent)
 
