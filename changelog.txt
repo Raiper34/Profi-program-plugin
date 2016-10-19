@@ -11,3 +11,5 @@
 2.1.0 notifications, searching
 -----
 3.0.0 renamed to profi program, changed urls, live tv
+-----
+3.0.1 domain change
