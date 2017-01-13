@@ -63,14 +63,14 @@ class ProfiProgram():
         if self.checkCredentials() != 1:
             return
 
-        url = self.buildUrl({'mode': 'archive'})
-        item = xbmcgui.ListItem("Archiv", iconImage="defaultFolder.png")
-        xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
         url = self.buildUrl({'mode': 'live'})
         item = xbmcgui.ListItem("Live", iconImage="defaultFolder.png")
         xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
         url = self.buildUrl({'mode': 'favlive'})
         item = xbmcgui.ListItem("Oblibene", iconImage="defaultFolder.png")
+        xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
+        url = self.buildUrl({'mode': 'archive'})
+        item = xbmcgui.ListItem("Archiv", iconImage="defaultFolder.png")
         xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
         xbmcplugin.endOfDirectory(self.addonHandle)
 
