@@ -69,6 +69,9 @@ class ProfiProgram():
         url = self.buildUrl({'mode': 'live'})
         item = xbmcgui.ListItem("Live", iconImage="defaultFolder.png")
         xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
+        url = self.buildUrl({'mode': 'favlive'})
+        item = xbmcgui.ListItem("Oblibene", iconImage="defaultFolder.png")
+        xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=url, listitem=item, isFolder=True)
         xbmcplugin.endOfDirectory(self.addonHandle)
 
     """
@@ -161,6 +164,23 @@ class ProfiProgram():
         xbmcplugin.endOfDirectory(self.addonHandle)
 
     """
+    Create favourite live TV list
+    """
+    def createFavouriteLiveTv(self):
+        page = self.opener.open(self.website + '/list/exportkodi/oblibene.php?' + urllib.urlencode({'mail': self.username, 'heslo': self.password}))
+        pageContent = page.read()
+        xmlDom = xml.dom.minidom.parseString(pageContent)
+
+        for tvShow in xmlDom.getElementsByTagName('seznam')[0].getElementsByTagName('tv'):
+            item = xbmcgui.ListItem(tvShow.getElementsByTagName('nazev')[0].firstChild.nodeValue, iconImage=tvShow.getElementsByTagName('logo')[0].firstChild.nodeValue)
+            item.setLabel(tvShow.getElementsByTagName('nazev')[0].firstChild.nodeValue)
+            item.setThumbnailImage(tvShow.getElementsByTagName('logo')[0].firstChild.nodeValue)
+            # item.setInfo('video', {'duration': tvShow.getElementsByTagName('delka')[0].firstChild.nodeValue})
+            xbmcplugin.addDirectoryItem(handle=self.addonHandle, url=tvShow.getElementsByTagName('url')[0].firstChild.nodeValue, listitem=item)
+
+        xbmcplugin.endOfDirectory(self.addonHandle)
+
+    """
     Pick mode, or decision what interface to generate
     """
     def pickMode(self):
@@ -174,6 +194,9 @@ class ProfiProgram():
         #Pick TV live
         elif mode[0] == 'live':
             self.createLiveTv()
+        # Pick favourite TV live
+        elif mode[0] == 'favlive':
+            self.createFavouriteLiveTv()
         #Pick Date
         elif mode[0] == 'chanel':
             self.createDates()

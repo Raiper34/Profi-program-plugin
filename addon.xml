@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.profi-program" name="Profi Program" version="3.0.1" provider-name="Raiper34">
+<addon id="plugin.video.profi-program" name="Profi Program" version="3.1.0" provider-name="Raiper34">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
